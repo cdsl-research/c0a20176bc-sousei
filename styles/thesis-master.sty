@@ -1,0 +1,396 @@
+% TEUthesis.sty -- 東京工科大学修士論文スタイルファイル
+% master用デザイン
+% 平成21年度に星研究室　品田 良太がthesis.styをベースに修正しました．
+% thesis.styの元のファイルを作成された塙先生，生野先生ありがとうございます．
+
+% 2015年6月9日   小島夏海 (井上研), 井上亮文   修正
+%  1) 年度を西暦に変更
+%  2) 概要の項目名を変更，下部注釈を削除，受領書の出力を停止
+%  3) preface.tex 三角関数，図サンプル，中央寄せを修正
+% 2018年11月27日 大野澄雄 電子提出に合わせて修正
+%  1) カバーをPDF末尾に移動→削除
+%  2) 表紙「指定様式１：内表紙」を「指定様式１：表紙」に→すべての「指定様式？？」を削除
+%  3) 表紙 指導教員の印欄を削除
+
+\ProvidesPackage{styles/thesis-master}
+\typeout{^^J%
+Document Style `thesis-master' .<25 Nov 2009>^^J%
+Created by Hoshi-lab^^J%
+}
+
+%%%%%%%%%%
+\def\id#1{\gdef\@id{#1}}			% 学籍番号
+\def\teacher#1{\gdef\@teacher{#1}}		% 指導教員
+\def\nendo#1{\gdef\@nendo{#1}}			% 修士論文作成年度
+\def\covertitle#1{\gdef\@covertitle{#1}}
+\def\scovertitle#1{\gdef\@scovertitle{#1}}
+\def\course#1{\gdef\@course{#1}}		% 学科、専攻
+\def\clab#1{\gdef\@clab{#1}}			% 研究室
+\def\ccourse#1{\gdef\@ccourse{#1}}
+\def\tcourse#1{\gdef\@tcourse{#1}}
+\def\etcourse#1{\gdef\@etcourse{#1}}
+\def\cid#1{\gdef\@cid{#1}}
+\def\jabst#1{\long\gdef\@jabst{#1}}		% 概要
+\def\eabst#1{\long\gdef\@eabst{#1}}
+\def\etitle#1{\gdef\@etitle{#1}}
+\def\eauthor#1{\gdef\@eauthor{#1}}
+\def\eteacher#1{\gdef\@eteacher{#1}}
+\def\date#1#2#3{\gdef\@year{#1}\gdef\@month{#2}\gdef\@day{#3}}
+\def\schoolyear#1{\gdef\@schoolyear{#1}}			% 提出年度
+
+\def\department#1{\gdef\@depertment{#1}}	% 学部
+\def\coursename#1{\gdef\@coursename{#1}}        % 所属学科
+\def\scourse#1{\gdef\@scourse{#1}}
+
+\newcommand{\courseofmastercs}{
+  {\department{東京工科大学大学院バイオ・情報メディア研究科}}
+  {\coursename{コンピュータサイエンス専攻}}
+  {\ccourse{コンピュータサイエンス専攻}}
+  {\tcourse{コンピュータ\\サイエンス専攻}}
+  {\scourse{コンピュータサイエンス~専~攻}}
+  {\covertitle{修士論文}}
+  {\scovertitle{修~~士~~論~~文}}
+  {\course{専~~~~~攻}}
+  {\etcourse{Computer\\Sience~Major}}
+}
+
+%%%% 受領証
+%%%%
+\def\juryoshotitle#1{\gdef\@juryoshotitle{#1}} % 受領証用 論文題目
+\def\juryoshoid#1#2#3#4#5#6#7#8{% 受領証用 学籍番号
+  \gdef\@juryoshoidA{#1} % 1文字目 アルファベット
+  \gdef\@juryoshoidB{#2}
+  \gdef\@juryoshoidC{#3}
+  \gdef\@juryoshoidD{#4}
+  \gdef\@juryoshoidE{#5}
+  \gdef\@juryoshoidF{#6}
+  \gdef\@juryoshoidG{#7}
+  \gdef\@juryoshoidH{#8}
+}
+
+%%%% カバー
+%%%%
+\def\makecover{\begin{titlepage}
+\let\footnoterule\relax \setcounter{page}{0}
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(146,222)(17,15)
+%背表紙
+\linethickness{0.5pt}
+\put(0,0){\framebox(13,250){}}
+%\put(0,245){\makebox(13,0)[b]{\@cnendo}}
+%\put(0,240){\makebox(13,0)[b]{年~~度}}
+\put(0,243){\makebox(13,10){\shortstack{\@schoolyear}}}
+\put(0,241){\makebox(13,0)[b]{年~~度}}
+\put(0,240){\line(1,0){13}}
+\put(0,90){\makebox(13,150){\vbox{\tate \Large \@title}}}
+\put(0,90){\line(1,0){13}}
+\put(0,20){\makebox(13,70){\vbox{\tate \huge \@author}}}
+\put(0,20){\line(1,0){13}}
+\put(0,10){\makebox(13,10)[b]{\Large \@clab}}
+\put(0,0){\makebox(13,10){\large 研究室}}
+%\put(0,0){\makebox(13,20){\shortstack{{\Large \@clab}\\{\large 研究室}}}}
+% カバー
+\put(20,0){\framebox(160,250){}}
+\put(55,220){\makebox(90,0)[b]{\huge ［~~\@covertitle~~］}}
+\put(55,217){\line(1,0){90}}
+\put(35,190){\makebox(130,0)[b]{\Large \@title}}
+\put(35,187){\line(1,0){130}}
+\put(35,170){\makebox(130,0)[b]{\Large （指~導~教~員）~~~~~\@teacher}}
+\put(45,110){\makebox(110,0)[b]{\Large \@ccourse~~\@clab 研究室}}
+\put(45,108){\line(1,0){110}}
+\put(45,80){\makebox(45,0)[b]{\large 学籍番号~\@cid}}
+\put(45,78){\line(1,0){45}}
+\put(45,60){\makebox(110,0)[b]{\huge \@author}}
+\put(45,57){\line(1,0){110}}
+\put(110,35){\makebox(0,0)[lb]{\Large ［~\@schoolyear~年度］}}
+\end{picture}
+\end{center}
+\end{titlepage}
+\setcounter{footnote}{0}
+\let\makecover\relax
+}
+
+%%%% 論文表紙
+%%%%
+\def\maketitle{\begin{titlepage}
+\let\footnoterule\relax \setcounter{page}{0}
+\begin{center}
+\setlength{\unitlength}{1mm}
+\begin{picture}(146,222)(0,0)
+%\put(-3,234){\makebox(0,0)[bl]{\small\textcolor[gray]{0.5}{指定様式1：表紙}}}
+% タイトル
+\put(0,215){\makebox(150,0)[b]{\LARGE \@depertment}}
+\put(0,196){\makebox(150,0)[b]{\LARGE \@covertitle}}
+% 論文題目
+\linethickness{1.3pt}
+\put(15,175){\makebox(0,0)[lb]{\small 論文題目}}
+\put(20.5,137){\framebox(117.5,35){}}
+\put(20.5,137){\makebox(117.5,35){\shortstack{\Large \bf \@title}}}
+% 指導教員
+\linethickness{1.3pt}
+\put(15,111.3){\makebox(0,0)[lb]{\small 指導教員}}
+\put(20.5,87){\framebox(117.5,22.3){}}
+%\put(115,87){\line(0,1){22.3}}
+\put(20.5,87){\makebox(117.5,22.3){\large \@teacher}}
+%\put(115,87){\makebox(23.3,22.3){\large 印}}
+% 提出日
+\put(15,67){\makebox(0,0)[lb]{\small 提出日}}
+\put(61,67.5){\makebox(0,0)[rb]{\small \@year}}
+\put(63,67){\makebox(0,0)[lb]{\small 年}}
+\put(80,67.5){\makebox(0,0)[rb]{\small \@month}}
+\put(82,67){\makebox(0,0)[lb]{\small 月}}
+\put(99,67.5){\makebox(0,0)[rb]{\small \@day}}
+\put(101,67){\makebox(0,0)[lb]{\small 日}}
+% 提出者
+\linethickness{1.3pt}
+\put(15,55){\makebox(0,0)[lb]{\small 提出者}}
+\put(20.5,23){\framebox(122,30.5){}}
+\put(20.5,33){\line(1,0){122}}
+\put(20.5,43){\line(1,0){122}}
+\put(48,23){\line(0,1){30.5}}
+\put(20,43){\makebox(28,10){\@course}}
+\put(48,43){\makebox(94,10){\large \@coursename}}
+\put(20,33){\makebox(28,10){学籍番号}}
+\put(48,33){\makebox(94,10){\large \@id}}
+\put(20,23){\makebox(28,10){氏~~~~~名}}
+\put(48,23){\makebox(94,10){\large \@author}}
+\end{picture}
+\end{center}
+\end{titlepage}
+\setcounter{footnote}{0}
+\let\maketitle\relax
+}
+
+
+%%%% 日本語論文概要
+%%%%
+\def\makejabstract{\begin{titlepage}
+\let\footnoterule\relax \setcounter{page}{0}
+\setlength{\unitlength}{1mm}
+\begin{center}
+\long\begin{picture}(146,222)(3,-4)
+\linethickness{1.3pt} % 太枠の描画
+\put(0,0){\framebox(153,212){}}
+\put(0,167){\line(1,0){153}}
+\linethickness{0.5pt} % 細枠の描画
+\put(0,193){\line(1,0){153}}
+\put(0,180){\line(1,0){153}}
+\put(38,167){\line(0,1){45}}
+% 内容
+%\put(0,230){\makebox(0,0)[bl]{\small\textcolor[gray]{0.5}{指定様式2：概要}}}
+\put(0,216){\makebox(153,0)[b]{\Large 修士論文要旨}}
+\put(0,193){\makebox(38,19){\large 論~~文~~題~~目}}
+\put(38,193){\makebox(115,19){\large \@title}}
+\put(0,180){\makebox(38,13){\large 執~筆~者}}
+\put(38,180){\makebox(115,13){\large \@author}}
+\put(0,167){\makebox(38,13){\large 指~~導~~教~~員}}
+\put(38,167){\makebox(115,13){\large \@teacher ~~教授}}
+\put(0,159){\makebox(0,0)[tl]{
+\begin{minipage}{151mm}
+\setlength{\baselineskip}{6mm}
+\begin{quotation}
+\@jabst
+\end{quotation}
+\end{minipage}
+}}
+\put(1.5,-4.5){\makebox(0,0)[lb]{\small 注1：和文要旨---800字程度}}
+\end{picture}
+\end{center}
+\end{titlepage}
+\setcounter{footnote}{0}
+\let\makejabstract\relax
+\thispagestyle{empty}}
+
+
+%%%% 英語論文概要
+%%%%
+\def\makeeabstract{\begin{titlepage}
+\let\footnoterule\relax \setcounter{page}{0}
+\setlength{\unitlength}{1mm}
+\begin{center}
+\long\begin{picture}(146,222)(3,-12)
+\linethickness{1.3pt} % 太枠の描画
+\put(0,0){\framebox(153,204){}}
+\linethickness{0.5pt} % 細枠の描画
+\put(0,190){\line(1,0){153}}
+\put(0,178){\line(1,0){153}}
+\put(0,165){\line(1,0){153}}
+\put(27,165){\line(0,1){39}}
+% 内容の描画
+%\put(0,222){\makebox(0,0)[bl]{\small\textcolor[gray]{0.5}{指定様式3：英文論旨}}}
+\put(0,210){\makebox(153,0)[b]{\LARGE Abstract}}
+\put(0,190){\makebox(27,13){\shortstack{\large Title}}}
+\put(27,190){\makebox(126,13){{\large \@etitle}}}
+\put(0,178){\makebox(27,12){\shortstack{\large Author}}}
+\put(27,178){\makebox(126,12){{\large \@eauthor}}}
+\put(0,165){\makebox(27,13){\shortstack{\large Supervisor}}}
+\put(27,165){\makebox(126,13){{\large Professor~~}{\large \@eteacher}}}
+\put(0,160){\makebox(0,0)[tl]{
+\begin{minipage}{151mm}
+\setlength{\baselineskip}{6mm}
+\begin{quotation}
+\@eabst
+\end{quotation}
+\end{minipage}
+}}
+\put(1.5,-4.5){\makebox(0,0)[lb]{\small 注1：英文要旨---500 ワード程度}}
+\end{picture}
+\end{center}
+\end{titlepage}
+\setcounter{footnote}{0}
+\let\makeeabstract\relax
+\thispagestyle{empty}}
+
+
+%%%% jreport.styの変更
+%%%%
+
+%% 目次
+%%
+\def\tableofcontents{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\chapter*{目 次\@mkboth{目 次}{目 次}}
+ \@starttoc{toc}\if@restonecol\twocolumn\fi \newpage}
+\def\listoffigures{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\chapter*{図 目 次\@mkboth {図 目 次}{図 目 次}}
+ \@starttoc{lof}\if@restonecol\twocolumn\fi \newpage}
+\def\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\def\listoftables{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\chapter*{表 目 次\@mkboth {表 目 次}{表 目 次}}
+ \@starttoc{lot}\if@restonecol\twocolumn\fi \newpage}
+\let\l@table\l@figure
+\def\listofprograms{\@restonecolfalse\if@twocolumn\@restonecoltrue\onecolumn
+ \fi\chapter*{プログラム目次\@mkboth {プログラム目次}{プログラム目次}}
+ \@starttoc{lop}\if@restonecol\twocolumn\fi \newpage}
+\let\l@program\l@figure
+
+%% 章見出し
+%%
+\def\@chapapp{第\thechapter 章}
+\def\@makechapterhead#1{ % 章番号あり
+ \vspace*{50pt} { \parindent 0pt \raggedright
+ \ifnum \c@secnumdepth >\m@ne \huge\bf \@chapapp{} \par
+ \vskip 20pt \fi \Huge \bf #1\par \nobreak \vskip 40pt } }
+
+\def\@makeschapterhead#1{ % 章番号なし
+ \vspace*{50pt} { \parindent 0pt \raggedright
+ \Huge \bf #1\par \nobreak \vskip 40pt } }
+
+\def\chapter{ % 章
+ \clearpage \thispagestyle{plain} \global\@topnum\z@
+ \@afterindenttrue \secdef\@chapter\@schapter}
+\newcounter{chapterx}
+\def\@chapter[#1]#2{ % \chapter{}
+ \refstepcounter{chapterx}
+ \ifnum \c@secnumdepth >\m@ne
+ \refstepcounter{chapter}
+ \typeout{\@chapapp}
+ \addcontentsline{toc}{chapter}{\protect
+ \numberline{\thechapter}#1}\else
+ \addcontentsline{toc}{chapter}{#1}\fi
+ \chaptermark{#1}
+ \addtocontents{lof}{\protect\addvspace{10pt}}
+ \addtocontents{lot}{\protect\addvspace{10pt}}
+ \addtocontents{lop}{\protect\addvspace{10pt}}\if@twocolumn
+\@topnewpage[\@makechapterhead{#2}]
+ \else \@makechapterhead{#2}
+ \@afterheading \fi}
+\def\@schapter#1{ % \chapter*{}
+ \if@twocolumn \@topnewpage[\@makeschapterhead{#1}]
+ \else \@makeschapterhead{#1}
+ \@afterheading\fi}
+
+\makeatletter
+\def\ps@headings{\let\@mkboth\markboth
+\def\@oddhead{$\underline{\makebox[\textwidth]{{\sl\leftmark}\hfill{\sl\rightmark}}}$}
+\def\@oddfoot{\rm\hfil\thepage\hfil}
+\def\@evenhead{$\underline{\makebox[\textwidth]{{\sl\leftmark}\hfill{\sl\rightmark}}}$}
+\def\@evenfoot{\rm\hfil\thepage\hfil}
+\def\chaptermark##1{\markboth{\ifnum\c@secnumdepth >\m@ne\thechapter.\ \fi ##1}{}}
+\def\sectionmark##1{\markright{\ifnum\c@secnumdepth >\z@\thesection.\ \fi ##1}}}
+
+%% 謝辞
+%%
+\def\@maketheacknowledgments{{\vspace*{50pt}\parindent 0pt \raggedright
+ \Huge \bf 謝辞 \par \vskip 10mm}}
+\def\theacknowledgments{\newpage \thispagestyle{plain}
+ \refstepcounter{chapter}
+ \typeout{謝辞}
+ \addcontentsline{toc}{chapter}{謝辞}
+ \markboth{}{} \@maketheacknowledgments \@afterheading}
+
+%% 参考文献
+%%
+\def\thebibliography#1{\chapter*{参考文献\@mkboth {参考文献}{参考文献}}
+ \refstepcounter{chapter}
+ \typeout{参考文献}
+ \addcontentsline{toc}{chapter}{参考文献}
+ \list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep  \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \fussy  \sfcode`\.=1000\relax}
+\let\endthebibliography=\endlist
+
+%% 発表論文
+%%
+\def\theachievement#1{\chapter*{業績\@mkboth {業績}{業績}}
+ \refstepcounter{chapter}
+ \typeout{業績}
+ \addcontentsline{toc}{chapter}{業績}
+ \list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep  \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \fussy  \sfcode`\.=1000\relax}
+\let\endtheachievement=\endlist
+
+%% 付録
+%%
+\def\appendix{\par
+ \setcounter{chapterx}{0} \setcounter{section}{0}
+ \def\thechapter{付録\Alph{chapterx}}
+ \def\thesection{\Alph{chapterx}.\arabic{section}}
+ \def\@chapapp{\thechapter}
+ \def\@secapp{\thesection}
+ \def\thelstlisting{\Alph{chapterx}.\@arabic\c@lstlisting}
+}
+
+%% 図,表,プログラム(figure,table,program 環境)
+%%
+\def\fnum@figure{図~\thefigure}
+\def\fnum@table{表~\thetable}
+\newcounter{program}[chapter]
+\def\theprogram{\thechapter.\@arabic\c@program}
+\def\fps@program{tbp}
+\def\ftype@program{4}
+\def\ext@program{lop}
+\def\fnum@program{プログラム~\theprogram}
+\def\program{\@float{program}}
+\let\endprogram\end@float
+\@namedef{program*}{\@dblfloat{program}}
+\@namedef{endprogram*}{\end@dblfloat}
+
+
+%% 表，図，式，プログラムの参照
+%%
+\def\figref{\@ifstar{\@Figref@}{\@figref@}}
+\def\@figref@#1{\@ifundefined{fig#1fig}{\textbf{図~\ref{#1}}}{図~\ref{#1}}%
+\global\@namedef{fig#1fig}{fig#1fig}}
+\def\@Figref@#1{図~\ref{#1}}
+
+\def\tabref{\@ifstar{\@Tabref@}{\@tabref@}}
+\def\@tabref@#1{\@ifundefined{tab#1tab}{\textbf{表~\ref{#1}}}{表~\ref{#1}}%
+\global\@namedef{tab#1tab}{tab#1tab}}
+\def\@Tabref@#1{表~\ref{#1}}
+
+\def\eqref{\@ifstar{\@Eqref@}{\@eqref@}}
+\def\@eqref@#1{\@ifundefined{eq#1eq}{\textbf{式~\ref{#1}}}{式~\ref{#1}}%
+\global\@namedef{eq#1eq}{eq#1eq}}
+\def\@Eqref@#1{式~\ref{#1}}
+
+\def\pgref{\@ifstar{\@Pgref@}{\@pgref@}}
+\def\@pgref@#1{\@ifundefined{pg#1pg}{\textbf{プログラム~\ref{#1}}}{プログラム~\ref{#1}}%
+\global\@namedef{pg#1pg}{pg#1pg}}
+\def\@Pgref@#1{プログラム~\ref{#1}}
+

@@ -1,0 +1,90 @@
+% thesis.tex -- 論文の書き方参考例
+%
+% (注意)氏名、学籍番号等を変更すること。
+%
+% (LaTeXの実行法) platex thesis.tex
+%
+%	このファイル内にある '% 'はコメント。
+%
+\documentclass[a4j,11pt]{jreport}
+\usepackage{ascmac}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{url}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{styles/thesis-master}
+\usepackage{styles/mylatex}
+\pagestyle{plain}
+
+% 所属研究科、専攻
+\courseofmastercs
+% 研究テーマ
+\title{論文タイトル}
+% 氏名
+\author{小~~山~~智~~之}
+% 学籍番号
+\id{G~~2~~1~~2~~1~~0~~2~~4}
+% 指導教員
+\teacher{串~田~~高~幸}
+% 提出日
+\date{2023}{1}{xx}
+% 提出年度
+\schoolyear{2022}
+
+% 研究室名(カバー用)
+\clab{クラウド・分散システム}
+% 学籍番号(カバー用)
+\cid{G2121024}
+
+%% 英語要旨
+\etitle{Title in English}
+\eauthor{Tomoyuki~~Koyama}
+\eteacher{Takayuki~~Kushida}
+
+\begin{document}
+%\makecover		% カバー（提出電子化に伴い削除）
+\maketitle		% 表紙
+
+% 修士論文和文要旨
+\jabst{
+  \input{00jabstract.tex}	% 00jabstract.texを読み込む
+}
+\makejabstract
+
+% 修士論文英文概要
+\eabst{
+  \input{00eabstract.tex}
+}
+\makeeabstract
+
+% 目次
+\pagenumbering{roman}
+\setcounter{page}{1}
+\thispagestyle{plain}
+\tableofcontents	% 目次
+% \listoffigures		% 図目次
+% \listoftables		% 表目次
+% \listofprograms		% プログラム目次
+
+% 論文本文
+% 論文本文は章や節単位で，いくつかのファイルに分割したほうが編集しやすい．
+% \input{hogehoge}	% hogehoge.texを読み込む．
+% 章構成は適宜変更すること．
+\pagenumbering{arabic}
+\input{01introduction}
+\input{02related}
+\input{03approach}
+\input{04implement}
+\input{05experiment}
+\input{06evaluation}
+\input{07discussion}
+\input{08conclusion}
+
+\bibliographystyle{junsrt}
+\bibliography{reference} % 参考文献
+\input{20publications} % 業績
+\input{21appendix}	% 付録
+
+
+
+\end{document}
