@@ -9,8 +9,7 @@ const char * ssid = "elecom-68d043";
 // const char * ssid = "CDSL-A910-11n";
 const char * password = "33dcu4jvm9d9";
 // const char * password = "11n-ky56$HDxgp";
-const int port = 3333;
-int count = 0;
+const int port = 1234;
 
 AsyncUDP udp;
 
@@ -18,19 +17,34 @@ WiFiServer server(port);
 
 
 // sequence array & push method
-int seq_ary[20];
-int *seq_ptr = seq_ary;
+int seq_ary[100];
 int add;
-int tmp;
-int ary_size;
+int tmp = 0;
+int ary_size = 0;
+int current_size = 0
+int count = 0;
 
 int array_add(int array[], int add) {
-    static e_size = 0;
+    static int e_size = 0;
     
     array[e_size] = add;
     e_size = e_size + 1;
     
     return e_size;
+}
+
+int compareInt(const void* a, const void* b) {
+    int aNum = *(int*)a;
+    int bNum = *(int*)b;
+
+    return aNum - bNum;
+}
+
+
+void printArray(const int* array, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        printf("%d ", array[i]);
+    }
 }
 
 
@@ -71,40 +85,82 @@ void setup()
             // Serial.print(", Data: ");
             // Serial.write(packet.data(), packet.length());
             Serial.println();
-
-            char *recvd;
-	          recvd = (char *)malloc(sizeof(char) * packet.length());
             
-            sprintf(recvd, "%s", packet.data());
-            printf("recv: %s\n", recvd);
+            // int s = sizeof(packet.data());
+            char recvd[packet.length()];
+            memcpy(recvd, packet.data(), packet.length());
+
+            printf("recv: %s", recvd);
+            printf("\n");
 
             char *token;
             token = strtok(recvd, ":");
-            printf("%s\n", token);
             
             int add_item = atoi(token);
 
             ary_size = array_add(seq_ary, add_item);
-            
-            printf("\n");
-            for (tmp = 0; tmp < ary_size; tmp++) {
-                printf("%d: {%d}\n", tmp, seq_ary[tmp]);
-            }
                   
             token = strtok(NULL, ":");
-            printf("data: %s\n", token);
 
             count++;
-            //reply to the client
-            // if (count == 10) {
-            //   sleep(1);
-            //   packet.printf("2,3,7");
-            //   Serial.print("sended!");
-            //   count = 0;
-            // }
+
+            // reply to the client
+            if (count == 8) {
+              printf("\n");
+
+              qsort(seq_ary, ary_size, sizeof(int), compareInt);
+
+              printArray(seq_ary, ary_size);
+
+              printf("\n");
+
+              // search loss packets
+              char loss[100] = "";
+              char buf[4];
+
+              // recv packet 0 case is Abbreviated...
+
+              // ex) seq_ary[3,4,5,6,7] / [1,2] loss search
+              if ( seq_ary[0] != 1 ) {
+                for ( count=1; count < seq_ary[0]; count++ ) {
+                  snprintf(buf, sizeof(buf), "%d", count);
+                  strcat(loss, buf);
+                  strcat(loss, ",");
+                }
+              }
+
+              count = seq_ary[0] + 1;
+              for ( tmp=1; tmp < ary_size; tmp++ ) {
+                while ( count < seq_ary[ary_size-1] ) {
+                  if ( seq_ary[tmp] == count ) {
+                      count++;
+                      break;
+                  } else {
+                      snprintf(buf, sizeof(buf), "%d", count);
+                      strcat(loss, buf);
+                      strcat(loss, ",");
+                      count++;
+                  }
+                }
+              }
+              
+              // ex) seq_ary[3,4,5,6,7] / [8,9,10] loss search
+              // 10 = 最大シーケンス番号
+              if ( seq_ary[ary_size-1] != 10 ) {
+                for ( count=seq_ary[ary_size-1]+1; count <= 10; count++ ) {
+                    snprintf(buf, sizeof(buf), "%d", count);
+                    strcat(loss, buf);
+                    strcat(loss, ",");
+                }
+              }
+              
+              packet.print(loss);
+              Serial.printf("%s sended!\n", loss);
+              
+              count = 0;
+
+            }
         });
-        //Send multicast
-        udp.print("Hello!");
     }
 }
 
@@ -137,7 +193,6 @@ void loop()
           // client.read((uint8_t*)input, sizeof(input) - 1);
           // Serial.printf("get: [%s]\n", input);
         }
-
         delay(1);
       }
       // server.write();
